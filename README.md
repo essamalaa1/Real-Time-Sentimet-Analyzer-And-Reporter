@@ -6,9 +6,6 @@ The Realtime Customer Insights Processor is a Streamlit web application designed
 
 **Project Goal:** To empower businesses to automatically analyze customer feedback, derive actionable insights quickly, and make data-driven decisions efficiently.
 
-![Screenshot of the App - Placeholder](https://via.placeholder.com/800x400.png?text=App+Screenshot+Here)
-*(Replace the placeholder URL above with an actual screenshot of your application)*
-
 ## Features
 
 *   **Google Sheets Integration:** Fetches data directly from public Google Sheets via their CSV export links.
