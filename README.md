@@ -44,17 +44,17 @@ The Realtime Customer Insights Processor is a Streamlit web application designed
 
 ## Project Structure
 .
-├── app.py # Main Streamlit application
-├── config.py # Configuration (LLM models, prompts, PDF CSS)
-├── core_logic.py # Data fetching, LLM report generation
-├── sentiment_analyzer.py # Sentiment model loading, preprocessing, prediction
-├── pdf_utils.py # Markdown to PDF conversion utilities
-├── state_manager.py # Loading/saving application state
-├── saved_model.h5 # Pre-trained Keras sentiment model (REQUIRED)
-├── preproc_artifacts.json # Preprocessing artifacts for sentiment model (REQUIRED)
-├── requirements.txt # Python dependencies
-├── review_processor_state.json # (Generated) Stores persistent app state
-└── README.md # This file
+├── app.py                        # Main Streamlit application
+├── config.py                     # Configuration (LLM models, prompts, PDF CSS)
+├── core_logic.py                 # Data fetching, LLM report generation
+├── sentiment_analyzer.py         # Sentiment model loading, preprocessing, prediction
+├── pdf_utils.py                  # Markdown to PDF conversion utilities
+├── state_manager.py              # Loading/saving application state
+├── saved_model.h5                # Pre-trained Keras sentiment model (REQUIRED)
+├── preproc_artifacts.json        # Preprocessing artifacts for sentiment model (REQUIRED)
+├── requirements.txt              # Python dependencies
+├── review_processor_state.json   # (Generated) Stores persistent app state
+└── README.md                     # This file
 
 ## Prerequisites
 
