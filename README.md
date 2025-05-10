@@ -169,6 +169,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 *   The Streamlit community for the fantastic web framework.
 *   The Ollama team for making local LLM hosting accessible.
 *   Open-source libraries like TensorFlow, NLTK, Pandas, WeasyPrint, and Langchain.
-*   *(If applicable, add any specific individuals or organizations that supported the project, e.g., for providing the initial idea, data, or volunteer time).*
 
 ---
