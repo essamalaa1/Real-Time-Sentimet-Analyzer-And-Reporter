@@ -172,12 +172,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 *   *(If applicable, add any specific individuals or organizations that supported the project, e.g., for providing the initial idea, data, or volunteer time).*
 
 ---
-
-**To make this README even better:**
-
-1.  **Add a Screenshot:** Replace the placeholder URL with an actual compelling screenshot of your application in action. This is very important for a UI-based project.
-2.  **`requirements.txt`:** Make sure you have a `requirements.txt` file. You can generate it using `pip freeze > requirements.txt` from your activated virtual environment.
-3.  **`LICENSE.md`:** If you use the MIT license badge, create a `LICENSE.md` file in your repository root and paste the standard MIT license text into it.
-4.  **Sentiment Model Files:** Be very clear about how users get `saved_model.h5` and `preproc_artifacts.json`. If they are too large for GitHub, provide a download link (e.g., from Google Drive, Hugging Face Hub) or instructions on how to train the model themselves (if you provide the training script and data).
-5.  **GIF Demo (Optional but great):** A short animated GIF showing the app's key features can be very engaging.
-6.  **Contact/Support (Optional):** If you plan to support it, add a way for users to ask questions or report issues (e.g., link to GitHub Issues).
