@@ -53,6 +53,8 @@ if 'app_state_loaded' not in st.session_state:
 
     st.session_state.app_state_loaded = True
     
+    # Load sentiment model and artifacts once at startup
+    # This will be used by Tab 2 (Sentiment Analyzer) and Tab 3 (Ad-hoc Tester)
     load_sentiment_model_and_artifacts()
 
 
@@ -70,7 +72,7 @@ def get_df_for_preview(sheet_id_input, cache_key_df, cache_key_sheet_id):
     return df_for_ui
 
 # --- TABS ---
-tab1, tab2 = st.tabs(["📋 Batch Reporter", "🧐 Sentiment Analyzer"])
+tab1, tab2, tab3 = st.tabs(["📋 Batch Reporter", "🧐 Sentiment Analyzer", "💬 Ad-hoc Sentiment Test"])
 
 # ==============================================================================
 # TAB 1: BATCH REPORTER
@@ -391,48 +393,62 @@ with tab2:
                 
                 processed_rows_list = []
                 if not st.session_state.sentiment_processed_df.empty:
+                    # Ensure we only take rows that are *before* the new processing start index
                     processed_rows_list = st.session_state.sentiment_processed_df.head(start_index_sa).to_dict('records')
 
                 temp_new_rows = []
                 for idx, row in new_rows_to_process_df.iterrows():
                     row_dict = row.to_dict()
                     texts_for_sentiment = []
-                    original_texts_for_row = {}
-
+                    
                     for col_name in current_sa_settings['sentiment_selected_cols']:
                         if col_name in row and pd.notna(row[col_name]):
                             text_val = str(row[col_name]).strip()
                             if text_val:
                                 texts_for_sentiment.append(text_val)
-                                original_texts_for_row[col_name] = text_val
                     
-                    row_sentiments = predict_sentiments_for_texts(texts_for_sentiment)
+                    # Get sentiment for all selected texts in the row
+                    row_sentiments_predictions = predict_sentiments_for_texts(texts_for_sentiment)
                     
-                    overall_row_sentiment = "N/A"
-                    if "Error: Model not loaded" in row_sentiments or "Error: Prediction failed" in row_sentiments :
-                         overall_row_sentiment = "Error"
-                    elif "Negative" in row_sentiments:
+                    # Determine overall sentiment for the row
+                    # If any text in the selected columns for the row is Negative, the row is Negative.
+                    # If all are Positive (and no Negative), the row is Positive.
+                    # Otherwise N/A or Error.
+                    overall_row_sentiment = "N/A" # Default
+                    if any("Error:" in s for s in row_sentiments_predictions):
+                        overall_row_sentiment = "Error"
+                    elif "Negative" in row_sentiments_predictions:
                         overall_row_sentiment = "Negative"
-                    elif "Positive" in row_sentiments:
+                    elif all(s == "Positive" for s in row_sentiments_predictions) and row_sentiments_predictions: # Ensure list is not empty
                         overall_row_sentiment = "Positive"
+                    elif not texts_for_sentiment: # No text found in selected columns
+                        overall_row_sentiment = "N/A"
                     
                     row_dict["Overall Sentiment"] = overall_row_sentiment
                     temp_new_rows.append(row_dict)
 
-                if processed_rows_list:
+                if processed_rows_list: # If there were previous rows
                      updated_df = pd.DataFrame(processed_rows_list + temp_new_rows)
-                else:
+                else: # If processing from scratch or no previous rows
                      updated_df = pd.DataFrame(temp_new_rows)
+                
+                # Ensure original columns + Overall Sentiment are present, in a sensible order
+                final_cols = fetched_df_sa.columns.tolist() + ["Overall Sentiment"]
+                # Remove duplicates if "Overall Sentiment" was somehow already there
+                final_cols = list(dict.fromkeys(final_cols)) 
+                st.session_state.sentiment_processed_df = updated_df[final_cols] if not updated_df.empty else pd.DataFrame(columns=final_cols)
 
-                st.session_state.sentiment_processed_df = updated_df
                 st.session_state.sentiment_display_trigger +=1
 
-                current_sa_settings['sentiment_last_processed_row_index'] = num_total_rows_sa
+                current_sa_settings['sentiment_last_processed_row_index'] = num_total_rows_sa # Update to total rows processed
+                save_app_state_from_dict(current_sa_settings)
                 
                 sentiment_status_placeholder.success(
                     f"Sentiment: Processed {len(new_rows_to_process_df)} rows. Display updated. Last processed index: {current_sa_settings['sentiment_last_processed_row_index']}."
                 )
-                should_wait_sa = True
+                # For live update, we might want a short wait then rerun, or make it more event driven if possible
+                # The current structure uses REFRESH_INTERVAL for subsequent checks.
+                should_wait_sa = True # Let it fall through to the refresh interval logic
 
             else:
                 sentiment_status_placeholder.info(
@@ -451,3 +467,54 @@ with tab2:
         sentiment_status_placeholder.info(
             f"Sentiment Analyzer is stopped. Configure and click 'Start'. Last processed for '{st.session_state.run_settings.get('sentiment_sheet_id', 'N/A')}' was row {st.session_state.run_settings.get('sentiment_last_processed_row_index', 'N/A')}."
         )
+
+
+# ==============================================================================
+# TAB 3: AD-HOC SENTIMENT TESTER
+# ==============================================================================
+with tab3:
+    st.header("💬 Ad-hoc Sentiment Tester")
+    st.caption("Test the sentiment of any text using the loaded sentiment analysis model (`saved_model.h5`).")
+
+    adhoc_user_text = st.text_area(
+        "Enter text for sentiment analysis:",
+        height=150,
+        key="adhoc_text_input",
+        placeholder="E.g., 'The food was amazing and the service was excellent!' or 'I am very disappointed with the quality.'"
+    )
+
+    if st.button("🔍 Analyze Sentiment", key="adhoc_analyze_button", type="primary"):
+        if adhoc_user_text and adhoc_user_text.strip():
+            with st.spinner("Analyzing sentiment..."):
+                # The model and artifacts are loaded at app startup via load_sentiment_model_and_artifacts()
+                # predict_sentiments_for_texts expects a list of texts
+                predictions = predict_sentiments_for_texts([adhoc_user_text.strip()])
+                
+                if predictions:
+                    result = predictions[0] # We sent one item, so we expect one result
+                    if result == "Positive":
+                        st.success(f"**Sentiment: {result}** 👍")
+                    elif result == "Negative":
+                        st.error(f"**Sentiment: {result}** 👎")
+                    elif result == "N/A":
+                        st.warning(f"**Sentiment: {result}** 🤔 \n\n(Could not determine sentiment. The text might be too short, neutral after processing, or contain only out-of-vocabulary words.)")
+                    elif "Error: Model not loaded" in result:
+                        st.error(f"**Analysis Error:** {result}. The sentiment model could not be loaded. Check console for details.")
+                    elif "Error:" in result:
+                        st.error(f"**Analysis Error:** {result}")
+                    else: 
+                        st.info(f"**Result: {result}**")
+                else:
+                    st.error("Analysis failed to return a result. This might indicate an issue with the sentiment prediction function.")
+        else:
+            st.warning("Please enter some text to analyze.")
+    
+    st.markdown("---")
+    st.markdown(
+        """
+        <small>This tool uses a pre-trained sentiment analysis model (based on TensorFlow/Keras) and associated preprocessing artifacts (`saved_model.h5`, `preproc_artifacts.json`) 
+        which are loaded when the application starts. Ensure these files are present in the same directory as `sentiment_analyzer.py`.
+        </small>
+        """,
+        unsafe_allow_html=True
+    )

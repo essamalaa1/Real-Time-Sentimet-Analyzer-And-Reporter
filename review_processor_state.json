@@ -14,7 +14,7 @@
         "\"How satisfied are you with the variety on our menu?\"",
         "Would You Recommend Us?"
     ],
-    "selected_model_label": "LLaMA 3 (8b)",
+    "selected_model_label": "LLaMA 3.2 (1B)",
     "sentiment_sheet_id": "1q2TrSzec3cBGKf51uKpfGXR3pZ92IFfE471GFTeg2s0",
     "sentiment_selected_cols": [
         "Overall Comments:",
