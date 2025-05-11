@@ -1,7 +1,5 @@
 # Realtime Customer Insights Processor
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 The Realtime Customer Insights Processor is a Streamlit web application designed to analyze customer feedback in near real-time. It fetches data from Google Sheets, generates insightful summary reports using Large Language Models (LLMs), and performs granular sentiment analysis on customer reviews.
 
 **Project Goal:** To empower businesses to automatically analyze customer feedback, derive actionable insights quickly, and make data-driven decisions efficiently.
