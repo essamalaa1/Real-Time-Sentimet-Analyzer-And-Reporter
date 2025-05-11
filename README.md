@@ -158,9 +158,6 @@ Please ensure your code adheres to good practices and includes relevant tests if
 *   **User Authentication & RBAC:** For enterprise use.
 *   **Scalability Improvements:** For larger datasets and more concurrent users.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details (though a LICENSE.md file isn't explicitly listed, it's standard to include one if you're using a license badge).
 
 ## Acknowledgements
 
