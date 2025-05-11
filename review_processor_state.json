@@ -1,32 +1,18 @@
 {
-    "last_processed_row_index": 0,
+    "last_processed_row_index": 5,
     "sheet_id": "1q2TrSzec3cBGKf51uKpfGXR3pZ92IFfE471GFTeg2s0",
-    "batch_size": 6,
+    "batch_size": 5,
     "selected_cols": [
         "Overall Comments:",
         "\"Please share any suggestions or areas where we can improve.\"",
-        "\"What was your favorite dish, and why?\"",
-        "Timestamp",
-        "\"How would you rate your overall dining experience?\"",
-        "\"How would you rate the quality of the food?\"",
-        "\"How would you rate the quality of service from our staff?\"",
-        "\"How did you find the cleanliness and ambiance of our restaurant?\"",
-        "\"How satisfied are you with the variety on our menu?\"",
-        "Would You Recommend Us?"
+        "\"What was your favorite dish, and why?\""
     ],
-    "selected_model_label": "LLaMA 3.2 (1B)",
+    "selected_model_label": "LLaMA 3 (8b)",
     "sentiment_sheet_id": "1q2TrSzec3cBGKf51uKpfGXR3pZ92IFfE471GFTeg2s0",
     "sentiment_selected_cols": [
         "Overall Comments:",
         "\"Please share any suggestions or areas where we can improve.\"",
-        "\"What was your favorite dish, and why?\"",
-        "Timestamp",
-        "\"How would you rate your overall dining experience?\"",
-        "\"How would you rate the quality of the food?\"",
-        "\"How would you rate the quality of service from our staff?\"",
-        "\"How did you find the cleanliness and ambiance of our restaurant?\"",
-        "\"How satisfied are you with the variety on our menu?\"",
-        "Would You Recommend Us?"
+        "\"What was your favorite dish, and why?\""
     ],
     "sentiment_last_processed_row_index": 27
 }

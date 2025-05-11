@@ -152,27 +152,3 @@ def predict_sentiments_for_texts(texts_list: list[str]) -> list[str]:
         final_predictions[i] = sentiment_map[pred_binary_val.item()] 
         
     return final_predictions
-
-# # --- Demo (optional, for standalone testing) ---
-# if __name__ == "__main__":
-#     _model, _vocab, _max_len, _pad_idx, _unk_idx = load_sentiment_model_and_artifacts()
-#     if _model:
-#         print("Model and artifacts loaded successfully for demo.")
-        
-#         samples = [
-#             "I absolutely loved this! Best purchase ever.",
-#             "Awful experience—won't buy again.",
-#             "It was okay, not great but not terrible.",
-#             None, # Test None
-#             "  ", # Test empty string
-#             "123 $$$$ ***" # Test string that might become empty after preprocessing
-#         ]
-        
-#         predictions = predict_sentiments_for_texts(samples)
-        
-#         for orig, pred in zip(samples, predictions):
-#             print(f"ORIGINAL: {orig}")
-#             print(f"PREPROCESSED (internal): {full_preprocess_text(orig)}")
-#             print(f"SENTIMENT: {pred}\n")
-#     else:
-#         print("Could not load model/artifacts for demo.")
